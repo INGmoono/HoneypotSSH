@@ -1,17 +1,16 @@
 """
 server.py
 
-Basic multi-threaded TCP listener.
-This is the foundation for the SSH honeypot server.
-
-Currently:
-- Accepts incoming TCP connections
-- Spawns a new thread per client
-- Prints client IP and port
+TCP listener that wraps incoming connections into a Paramiko SSH transport.
 """
 
 import socket
 import threading
+import paramiko
+import time
+
+from core.key_manager import load_or_generate_host_key
+from core.ssh_server import SSHHoneypotServer
 
 HOST = "0.0.0.0"
 PORT = 2222
@@ -19,35 +18,65 @@ PORT = 2222
 
 def handle_client(client_socket, client_address):
     """
-    Handles a single client connection.
-
-    Args:
-        client_socket (socket.socket): The client socket.
-        client_address (tuple): (IP, port) of the client.
+    Handles an incoming SSH client connection.
     """
 
     ip, port = client_address
-    print(f"[+] New connection from {ip}:{port}")
+    print(f"[+] SSH connection from {ip}:{port}")
 
-    # For now, just close the connection
-    client_socket.close()
+    transport = None
 
+    try:
+        transport = paramiko.Transport(client_socket)
+
+        host_key = load_or_generate_host_key()
+        transport.add_server_key(host_key)
+
+        
+        server = SSHHoneypotServer(ip, port, None)
+
+        # start negociation SSH
+        transport.start_server(server=server)
+
+        # Get hacker's remote SSH version 
+        client_version = transport.remote_version
+        server.client_version = client_version
+
+        print(f"[+] Client version: {client_version}")
+
+        # wate canal request
+        channel = transport.accept(20)
+
+        if channel is None:
+            print(f"[!] No channel request from {ip}")
+            return
+
+        # keep conection on
+        while transport.is_active():
+            time.sleep(1)
+
+    except Exception as e:
+        print(f"[!] Error handling client {ip}: {e}")
+
+    finally:
+        if transport:
+            transport.close()
+        client_socket.close()
 
 def start_server():
     """
-    Starts the TCP server and listens for incoming connections.
+    Starts the multi-threaded SSH honeypot.
     """
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((HOST, PORT))
     server.listen(100)
 
-    print(f"[+] Honeypot listening on {HOST}:{PORT}")
+    print(f"[+] SSH Honeypot listening on {HOST}:{PORT}")
 
     while True:
         client_socket, client_address = server.accept()
 
-        # Create a new thread per connection
         client_thread = threading.Thread(
             target=handle_client,
             args=(client_socket, client_address),
