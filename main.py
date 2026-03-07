@@ -10,14 +10,20 @@ Current stage:
 
 from core.key_manager import load_or_generate_host_key
 from core.server import start_server
-
+from core.analytics import load_existing_stats, render_stats
 
 def main():
     """
     Initializes honeypot components.
     """
+    print("\n[*] Loading previous honeypot statistics...\n")
+
+    load_existing_stats()
+
+    render_stats()
 
     load_or_generate_host_key()
+    
     start_server()
 
 

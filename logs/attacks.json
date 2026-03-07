@@ -1,2 +1,13 @@
 {"ip": "127.0.0.1", "port": 36908, "username": "testuser", "password": "password123", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-01T19:39:48.925788"}
 {"ip": "127.0.0.1", "port": 36908, "username": "testuser", "password": "dsa", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-01T19:39:52.439275"}
+{"ip": "127.0.0.1", "port": 53606, "username": "root", "password": "admin123", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T20:46:36.738312"}
+{"ip": "127.0.0.1", "port": 59638, "username": "root", "password": "adminadmin", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T20:47:55.599914"}
+{"ip": "127.0.0.1", "port": 59638, "username": "root", "password": "password123", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T20:48:07.694211"}
+{"ip": "127.0.0.1", "port": 55954, "username": "root", "password": "admin", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:05:13.944859"}
+{"ip": "127.0.0.1", "port": 55954, "username": "root", "password": "admin123", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:05:16.786824"}
+{"ip": "127.0.0.1", "port": 55954, "username": "root", "password": "password123", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:05:21.994761"}
+{"ip": "127.0.0.1", "port": 59058, "username": "root", "password": "contrasena", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:06:16.086646"}
+{"ip": "127.0.0.1", "port": 47452, "username": "root", "password": "crackpassword", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:14:08.379885"}
+{"ip": "127.0.0.1", "port": 47452, "username": "root", "password": "ds", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:14:13.559765"}
+{"ip": "127.0.0.1", "port": 46272, "username": "root", "password": "defusepassword", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:22:28.239179"}
+{"ip": "127.0.0.1", "port": 46272, "username": "root", "password": "rockyou.txt", "ssh_client_version": "SSH-2.0-OpenSSH_10.2", "timestamp_utc": "2026-03-07T21:22:36.633540"}
