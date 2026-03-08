@@ -106,6 +106,10 @@ def render_stats():
     for i, (pwd, count) in enumerate(top_passwords, start=1):
         print(f"{i}. {pwd:<12} ({count})")
 
+    print("\nTop Attacking IPs")
+    for i, (ip, count) in enumerate(get_top_ips(), start=1):
+        print(f"{i}. {ip:<15} ({count})")
+
     print(f"\nTotal Attempts: {total_attempts}")
 
     print("\n└─────────────────────────────────────┘\n")
@@ -130,11 +134,26 @@ def load_existing_stats():
                 username = attack.get("username")
                 password = attack.get("password")
 
-                attempts_per_ip[ip] += 1
-                username_counter[username] += 1
-                password_counter[password] += 1
+                if ip:
+                    attempts_per_ip[ip] += 1
+
+                if username:
+                    username_counter[username] += 1
+
+                if password:
+                    password_counter[password] += 1
 
                 total_attempts += 1
 
             except json.JSONDecodeError:
                 continue
+
+def get_top_ips(n=5):
+    """
+    Returns the most aggressive attacking IPs.
+    """
+    return sorted(
+        attempts_per_ip.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )[:n]
