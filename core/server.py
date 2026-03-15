@@ -11,6 +11,7 @@ import time
 
 from core.key_manager import load_or_generate_host_key
 from core.ssh_server import SSHHoneypotServer
+from core.geoip import get_ip_info
 
 HOST = "0.0.0.0"
 PORT = 2222

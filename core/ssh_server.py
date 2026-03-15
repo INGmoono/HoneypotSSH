@@ -15,6 +15,7 @@ from core.analytics import (
 
 import paramiko
 from core.logger import log_attack
+from core.geoip import get_ip_info
 
 
 class SSHHoneypotServer(paramiko.ServerInterface):
@@ -35,6 +36,8 @@ class SSHHoneypotServer(paramiko.ServerInterface):
 
         stats = register_attempt(self.client_ip, username, password)
 
+        geo = get_ip_info(self.client_ip)
+
         attack_data = {
             "ip": self.client_ip,
             "port": self.client_port,
@@ -45,13 +48,34 @@ class SSHHoneypotServer(paramiko.ServerInterface):
 
         log_attack(attack_data)
 
-        print("\n[!] Login attempt detected")
-        print(f"    IP: {self.client_ip}")
-        print(f"    Port: {self.client_port}")
-        print(f"    Username: {username}")
-        print(f"    Password: {password}")
-        print(f"    Client Version: {self.client_version}")
-        print(f"    Attempts from this IP: {stats['attempts_from_ip']}")
+        # NETWORK INFORMATION
+
+        print("\n================ SSH HONEYPOT ALERT ================\n")
+        print("[Network Information]")
+        print(f"    IP Address        : {self.client_ip}")
+        print(f"    Source Port       : {self.client_port}")
+        print(f"    SSH Client        : {self.client_version}")
+
+        # GEOLOCATION INFORMATION
+        if geo:
+            print("\n[Geolocation]")
+            print(f"    Country           : {geo['country']}")
+            print(f"    City              : {geo['city']}")
+            print(f"    Coordinates       : {geo['lat']}, {geo['lon']}")
+            print(f"    ISP               : {geo['isp']}")
+            print(f"    ASN               : {geo['asn']}")
+        else:
+            print("\n[Geolocation]")
+            print("    Geolocation data not available")
+
+        # CREDENTIALS CAPTURED
+        print("\n[Credentials Captured]")
+        print(f"    Username          : {username}")
+        print(f"    Password          : {password}")
+
+        # ATTACK STATISTICS
+        print("\n[Attack Statistics]")
+        print(f"    Attempts from IP  : {stats['attempts_from_ip']}")
 
         if stats["time_since_last_attempt"] is not None:
             print(f"    Time since last attempt: {stats['time_since_last_attempt']:.2f}s")
@@ -64,6 +88,8 @@ class SSHHoneypotServer(paramiko.ServerInterface):
         if is_suspicious(self.client_ip):
             print(f"    🚨 Suspicious IP flagged: {self.client_ip}")
 
+        print("\n====================================================\n")
+        
         # Show statistics every 10 attempts
         if stats["total_attempts"] % 10 == 0:
             render_stats()
